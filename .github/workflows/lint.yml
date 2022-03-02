@@ -22,6 +22,5 @@ jobs:
         run: pip install lintly flake8
       - name: Lint with flake8
         run: flake8 | lintly
-        with:
+        env:
           LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-          args: "--ignore=E121,E123 ."
