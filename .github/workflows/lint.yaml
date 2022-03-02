@@ -1,0 +1,30 @@
+name: Lint # name of the action (displayed in the github interface)
+
+on: # event list
+  pull_request: # on a pull request to each of these branches
+    branches:
+      - develop
+
+jobs:
+  flake8_py3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+      - name: Install dependencies
+        run: pip install lintly==0.6.0 flake8==3.9.2 black==21.9b0
+      - name: Install problem dependencies
+        run: pip install MarkupSafe==2.0.1 Jinja2==2.11.3
+      - name: Lint with flake8
+        run: flake8 | lintly --format=flake8
+        env:
+          LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint with black
+        run: black . --check 2>&1 >/dev/null | lintly  --format=black
+        env:
+          LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}

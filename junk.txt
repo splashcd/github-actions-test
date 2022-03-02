@@ -1,0 +1,28 @@
+name: Lint # name of the action (displayed in the github interface)
+
+on: # event list
+  pull_request: # on a pull request to each of these branches
+    branches:
+      - develop
+    paths:
+           - '*.py'
+
+jobs:
+  flake8_py3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+      - name: Code Checkout
+        uses: actions/checkout@v2
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        uses: suo/flake8-github-action@releases/v1
+        with:
+          checkName: 'flake8_py3'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
