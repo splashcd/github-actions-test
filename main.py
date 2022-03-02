@@ -1,5 +1,5 @@
 class Main:
-      const1 = 1
+    const1 = 1
     CONST2 = 2
 
     def __init__(  self  ):

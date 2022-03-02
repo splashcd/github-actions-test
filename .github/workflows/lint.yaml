@@ -4,8 +4,6 @@ on: # event list
   pull_request: # on a pull request to each of these branches
     branches:
       - develop
-    paths:
-      - '*.py'
 
 jobs:
   flake8_py3:
@@ -23,6 +21,10 @@ jobs:
       - name: Install problem dependencies
         run: pip install MarkupSafe==2.0.1 Jinja2==2.11.3
       - name: Lint with flake8
-        run: flake8 | lintly
+        run: flake8 | lintly --exit-zero
+        env:
+          LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint with black
+        run: black . --check 2>&1 >/dev/null | lintly --exit-zero
         env:
           LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}
